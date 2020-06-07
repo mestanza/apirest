@@ -54,6 +54,9 @@ class ClientesController extends Controller
             $id_cliente = Hash::make($datos['primer_nombre'] . $datos['primer_apellido'] . $datos['email']);
             $llave_secreta = Hash::make($datos['email'] . $datos['primer_apellido'] . $datos['primer_nombre']);
 
+            $id_cliente = str_replace('$', '-',$id_cliente );
+            $llave_secreta = str_replace('$', '-',$llave_secreta );
+
             /**Se crea el modelo */
             $cliente = new Clientes();
 
@@ -70,7 +73,7 @@ class ClientesController extends Controller
             /**Se envia al cliente la notifacion que el proceso fue exitoso */
             $json = array(
                 "status"  => "200",
-                "detalle" => $id_cliente,
+                "id_cliente" => $id_cliente,
                 "llave_secreta" => $llave_secreta
             );
 
