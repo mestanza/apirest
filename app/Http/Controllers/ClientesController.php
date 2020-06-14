@@ -14,7 +14,7 @@ class ClientesController extends Controller
     {
 
         $json = array(
-            "detalle" => "Pepito no encontradoooo"
+            "detalle" => "Se valida la conexion"
         );
         echo json_encode($json, true);
     }
@@ -43,8 +43,9 @@ class ClientesController extends Controller
 
         /**Si falla Se enviara un json informando del error */
         if ($validator->fails()) {
+            $errores = $validator->errors();
             $json = array(
-                "detalle" => "Datos no validos",
+                "detalle" => $errores,
                 "status" => "404"
             );
             return json_encode($json, true);
@@ -54,6 +55,7 @@ class ClientesController extends Controller
             $id_cliente = Hash::make($datos['primer_nombre'] . $datos['primer_apellido'] . $datos['email']);
             $llave_secreta = Hash::make($datos['email'] . $datos['primer_apellido'] . $datos['primer_nombre']);
 
+            /**Se reemplaza por temas de encryptacion en postman */
             $id_cliente = str_replace('$', '-',$id_cliente );
             $llave_secreta = str_replace('$', '-',$llave_secreta );
 
@@ -68,7 +70,6 @@ class ClientesController extends Controller
             $cliente->llave_secreta = $llave_secreta;
 
             $cliente->save();
-
 
             /**Se envia al cliente la notifacion que el proceso fue exitoso */
             $json = array(
